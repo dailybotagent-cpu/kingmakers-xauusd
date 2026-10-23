@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>KINGMAKERS XAUUSD Calculator</title>
+<style>
+:root{--bg:#0b1120;--panel:#111827;--panel2:#1f2937;--line:#374151;--gold:#d4af37;--text:#f9fafb;--muted:#cbd5e1;--green:#86efac;--red:#fca5a5;--blue:#93c5fd}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:1100px;margin:auto;padding:18px 14px 40px}.head{display:flex;gap:12px;align-items:center;margin-bottom:18px}.logo{width:48px;height:48px;border-radius:12px;background:var(--gold);color:#111827;display:grid;place-items:center;font-weight:900;font-size:22px;flex-shrink:0}.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--gold);font-weight:700}.head h1{font-size:22px;margin:0}.sub{color:var(--muted);font-size:13px}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.nav button{width:auto;margin:0;padding:11px 14px;background:var(--panel2);color:var(--text);border:1px solid var(--line)}.nav button.active{background:var(--gold);color:#111827;border-color:var(--gold)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}.panel h2{font-size:17px;margin:0 0 14px}.panel h3{font-size:14px;margin:18px 0 10px;color:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}.field input,.field select{width:100%;border:1px solid #4b5563;border-radius:10px;background:#0b1120;color:var(--text);padding:12px;font:inherit;min-width:0}.field input:focus,.field select:focus{outline:2px solid var(--gold);border-color:var(--gold)}button{cursor:pointer;width:100%;border:0;border-radius:11px;background:var(--gold);color:#111827;font-weight:800;font-size:14px;padding:13px;margin-top:14px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{background:var(--panel2);border-radius:12px;padding:13px;min-width:0}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-size:21px;font-weight:800;margin-top:4px;overflow-wrap:anywhere}.gold{color:var(--gold)}.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}
+.notice{font-size:12px;color:var(--muted);background:#172033;border-left:3px solid var(--gold);padding:11px;border-radius:7px;margin-top:12px}.notice.warn{border-color:var(--red)}.notice.good{border-color:var(--green)}
+.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:680px;font-size:12px}th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th{color:var(--gold);font-weight:700}th:first-child,td:first-child{text-align:left}tfoot td{font-weight:800}
+.hidden{display:none!important}.foot{font-size:12px;color:#94a3b8;text-align:center;margin-top:20px}.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--muted);font-size:11px;margin:2px 4px 2px 0}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.cards{grid-template-columns:repeat(4,minmax(0,1fr))}.head h1{font-size:26px}}
+</style>
+</head>
+<body>
+<main>
+<header class="head"><div class="logo">K</div><div><div class="eyebrow">KINGMAKERS</div><h1>XAUUSD Risk Calculator</h1><div class="sub">Valetax CENT · XAUUSD.vxc · kalkulator saja, tidak mengeksekusi order</div></div></header>
+<div class="nav">
+<button id="tabMain" class="active" type="button" onclick="showTab('main')">Kalkulator Layering Utama</button>
+<button id="tabRecovery" type="button" onclick="showTab('recovery')">Kalkulator Recovery SL</button>
+</div>
+
+<section id="mainPage">
+<section class="panel">
+<h2>1. Pengaturan layering utama</h2>
+<div class="grid">
+<div class="field"><label for="risk">Target risiko (CENT)</label><input id="risk" type="number" min="1" step="1" value="1000"></div>
+<div class="field"><label for="direction">Arah transaksi</label><select id="direction"><option value="SELL">SELL</option><option value="BUY">BUY</option></select></div>
+<div class="field"><label for="entry">Harga first entry</label><input id="entry" type="number" min="0.01" step="0.01" value="4110.00"></div>
+<div class="field"><label for="tp">Target profit dari harga rata-rata (pips)</label><input id="tp" type="number" min="1" step="1" value="100"></div>
+<div class="field"><label for="pipvalue">Nilai per 1 lot per pip (CENT)</label><input id="pipvalue" type="number" min="0.0001" step="0.01" value="10"></div>
+<div class="field"><label for="step">Kelipatan lot broker</label><select id="step"><option value="0.01">0,01 lot</option><option value="0.1">0,10 lot</option></select></div>
+</div>
+<div class="notice">Aturan layering utama: zona 170 pips, jarak layer 15 pips, layer 1–5 = lot dasar, layer 6–11 = 2× lot dasar, layer terakhir 20 pips dari SL. Konversi harga yang digunakan: 10 pips = 1,00. Nilai pip harus dicocokkan dengan spesifikasi MT5 akunmu.</div>
+<button type="button" onclick="calculateMain()">HITUNG LAYERING UTAMA</button>
+</section>
+<section class="panel"><h2>2. Ringkasan layering utama</h2>
+<div class="cards">
+<div class="stat"><div class="label">Lot dasar</div><div id="baseLot" class="value gold">—</div></div>
+<div class="stat"><div class="label">Total lot</div><div id="totalLot" class="value">—</div></div>
+<div class="stat"><div class="label">Risiko aktual sampai SL</div><div id="actualRisk" class="value red">—</div></div>
+<div class="stat"><div class="label">Selisih dari target risiko</div><div id="diff" class="value">—</div></div>
+<div class="stat"><div class="label">Harga SL</div><div id="slPrice" class="value">—</div></div>
+<div class="stat"><div class="label">Harga rata-rata tertimbang</div><div id="avgPrice" class="value">—</div></div>
+<div class="stat"><div class="label">Target harga (TP)</div><div id="tpPrice" class="value green">—</div></div>
+<div class="stat"><div class="label">Estimasi profit di TP</div><div id="tpProfit" class="value green">—</div></div>
+</div><div id="warning" class="notice">Isi pengaturan lalu tekan hitung.</div></section>
+<section class="panel"><h2>3. Rincian 11 layer utama</h2><div class="tablewrap"><table><thead><tr><th>Layer</th><th>Harga entry</th><th>Lot</th><th>Jarak ke SL (pips)</th><th>Risiko (CENT)</th><th>Jarak ke TP (pips)</th><th>Profit di TP (CENT)</th></tr></thead><tbody id="rows"></tbody><tfoot id="foot"></tfoot></table></div></section>
+</section>
+
+<section id="recoveryPage" class="hidden">
+<section class="panel">
+<h2>1. Pengaturan Recovery SL</h2>
+<div class="grid">
+<div class="field"><label for="prevLoss">Kerugian setup sebelumnya (CENT)</label><input id="prevLoss" type="number" min="0" step="1" value="1000"></div>
+<div class="field"><label for="recEntry">Harga awal counter / recovery</label><input id="recEntry" type="number" min="0.01" step="0.01" value="4117.00"></div>
+<div class="field"><label for="recDirection">Arah counter</label><select id="recDirection"><option value="SELL">SELL (harga naik = floating minus)</option><option value="BUY">BUY (harga turun = floating minus)</option></select></div>
+<div class="field"><label for="recTP">Target gerak menguntungkan dari entry awal (pips)</label><input id="recTP" type="number" min="1" step="1" value="100"></div>
+<div class="field"><label for="recZones">Skenario zona yang aktif sebelum harga berbalik</label><select id="recZones"><option value="1">1 zona aktif (10 layer)</option><option value="2">2 zona aktif (20 layer)</option><option value="3" selected>3 zona aktif (30 layer) — konservatif</option></select></div>
+<div class="field"><label for="recLossExtra">Target surplus setelah menutup kerugian (CENT)</label><input id="recLossExtra" type="number" min="0" step="1" value="0"></div>
+<div class="field"><label for="recPipValue">Nilai per 1 lot per pip (CENT)</label><input id="recPipValue" type="number" min="0.0001" step="0.01" value="10"></div>
+<div class="field"><label for="recLotStep">Kelipatan lot broker</label><select id="recLotStep"><option value="0.01">0,01 lot</option><option value="0.1">0,10 lot</option></select></div>
+<div class="field"><label for="riskCap">Batas risiko maksimum yang diizinkan (CENT, 0 = tanpa batas)</label><input id="riskCap" type="number" min="0" step="1" value="0"></div>
+</div>
+<div class="notice">Model recovery: 10 layer per zona; 3 zona dimulai pada 0, 40, dan 80 pips adverse; batas SL berada pada 120 pips adverse. Di dalam setiap zona, 10 layer diasumsikan berjarak rata 4 pips (offset 0, 4, 8, …, 36 pips dari awal zona). Lot dasar dihitung otomatis agar target profit menutup kerugian setup sebelumnya + surplus. Hasil bergantung pada nilai pip yang dimasukkan.</div>
+<button type="button" onclick="calculateRecovery()">HITUNG LOT RECOVERY & RISIKO</button>
+</section>
+<section class="panel"><h2>2. Hasil Recovery SL</h2>
+<div class="cards">
+<div class="stat"><div class="label">Lot dasar yang dibutuhkan (sebelum pembulatan)</div><div id="recRawLot" class="value gold">—</div></div>
+<div class="stat"><div class="label">Lot dasar broker (dibulatkan turun)</div><div id="recLot" class="value gold">—</div></div>
+<div class="stat"><div class="label">Total lot skenario terpilih</div><div id="recTotalLot" class="value">—</div></div>
+<div class="stat"><div class="label">Estimasi profit di target (CENT)</div><div id="recProfit" class="value green">—</div></div>
+<div class="stat"><div class="label">Kerugian sebelumnya</div><div id="recPrevLoss" class="value red">—</div></div>
+<div class="stat"><div class="label">Hasil bersih setelah recovery (CENT)</div><div id="recNet" class="value">—</div></div>
+<div class="stat"><div class="label">Risiko zona 1 sampai batas SL</div><div id="recRisk1" class="value red">—</div></div>
+<div class="stat"><div class="label">Risiko zona 1–2 sampai batas SL</div><div id="recRisk2" class="value red">—</div></div>
+<div class="stat"><div class="label">Risiko zona 1–3 sampai batas SL</div><div id="recRisk3" class="value red">—</div></div>
+<div class="stat"><div class="label">Risiko total skenario terpilih</div><div id="recRiskSelected" class="value red">—</div></div>
+</div><div id="recWarning" class="notice">Isi pengaturan lalu tekan hitung.</div></section>
+<section class="panel"><h2>3. Rincian layer Recovery</h2><div class="tablewrap"><table><thead><tr><th>Zona</th><th>Layer</th><th>Harga entry</th><th>Lot</th><th>Jarak ke batas SL (pips)</th><th>Risiko ke SL (CENT)</th><th>Jarak ke target (pips)</th><th>Profit di target (CENT)</th></tr></thead><tbody id="recRows"></tbody><tfoot id="recFoot"></tfoot></table></div></section>
+</section>
+<div class="foot">KINGMAKERS XAUUSD · Kalkulator simulasi saja, tidak mengeksekusi order. Nilai tick/pip, spread, komisi, swap, slippage, stop-out dan aturan broker dapat mengubah hasil. Validasi spesifikasi XAUUSD.vxc di MT5 sebelum mengambil keputusan.</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const fmt=(n,d=2)=>Number.isFinite(n)?n.toLocaleString('id-ID',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const money=n=>fmt(n,0)+' cent';
+function showTab(tab){
+ $('mainPage').classList.toggle('hidden',tab!=='main');$('recoveryPage').classList.toggle('hidden',tab!=='recovery');
+ $('tabMain').classList.toggle('active',tab==='main');$('tabRecovery').classList.toggle('active',tab==='recovery');
+}
+function calculateMain(){
+ const risk=Number($('risk').value),entry=Number($('entry').value),pv=Number($('pipvalue').value),tpPips=Number($('tp').value),step=Number($('step').value),dir=$('direction').value;
+ if(!(risk>0&&entry>0&&pv>0&&tpPips>0&&step>0)){ $('warning').textContent='Isi semua nilai dengan angka lebih besar dari nol.';return; }
+ const offsets=Array.from({length:11},(_,i)=>i*15),mult=offsets.map((_,i)=>i<5?1:2),dist=offsets.map(x=>170-x);
+ const sumRisk=dist.reduce((s,d,i)=>s+d*mult[i],0),raw=risk/(pv*sumRisk),base=Math.floor((raw+1e-10)/step)*step;
+ const lots=mult.map(m=>Math.round(base*m*100000)/100000),prices=offsets.map(o=>entry+(dir==='SELL'?1:-1)*o/10);
+ const sl=entry+(dir==='SELL'?1:-1)*17,avg=lots.reduce((s,l,i)=>s+l*prices[i],0)/(lots.reduce((s,l)=>s+l,0)||1);
+ const tp=avg+(dir==='SELL'?-1:1)*tpPips/10;
+ let totalLot=0,riskActual=0,profit=0,body='';
+ offsets.forEach((o,i)=>{const r=lots[i]*dist[i]*pv,pips=Math.abs(tp-prices[i])*10,pr=lots[i]*pips*pv;totalLot+=lots[i];riskActual+=r;profit+=pr;body+=`<tr><td>${i+1}</td><td>${fmt(prices[i])}</td><td>${fmt(lots[i],3)}</td><td>${fmt(dist[i],0)}</td><td>${fmt(r,0)}</td><td>${fmt(pips,1)}</td><td>${fmt(pr,0)}</td></tr>`;});
+ $('baseLot').textContent=fmt(base,2);$('totalLot').textContent=fmt(totalLot,2);$('actualRisk').textContent=money(riskActual);$('diff').textContent=money(risk-riskActual);
+ $('slPrice').textContent=fmt(sl);$('avgPrice').textContent=fmt(avg);$('tpPrice').textContent=fmt(tp);$('tpProfit').textContent=money(profit);$('rows').innerHTML=body;
+ $('foot').innerHTML=`<tr><td colspan="2">TOTAL</td><td>${fmt(totalLot,2)}</td><td>—</td><td>${fmt(riskActual,0)}</td><td>—</td><td>${fmt(profit,0)}</td></tr>`;
+ let msg=base<step?'Lot hasil pembulatan menjadi 0. Target risiko terlalu kecil dibanding nilai pip dan struktur layer.':riskActual>risk?'Peringatan: risiko aktual melebihi target risiko.':`Perhitungan selesai. Risiko aktual ${fmt(riskActual,0)} cent dibanding target ${fmt(risk,0)} cent.`;
+ $('warning').textContent=msg;$('warning').className='notice '+(base<step||riskActual>risk?'warn':'good');
+}
+function calculateRecovery(){
+ const loss=Number($('prevLoss').value),entry=Number($('recEntry').value),tp=Number($('recTP').value),zones=Number($('recZones').value),extra=Number($('recLossExtra').value),pv=Number($('recPipValue').value),step=Number($('recLotStep').value),cap=Number($('riskCap').value),dir=$('recDirection').value;
+ if(!(loss>=0&&entry>0&&tp>0&&zones>=1&&extra>=0&&pv>0&&step>0&&cap>=0)){ $('recWarning').textContent='Periksa input. Harga, target, dan nilai pip harus positif; kerugian/surplus/batas risiko tidak boleh negatif.';return; }
+ const all=[];
+ for(let z=0;z<3;z++){
+   for(let j=0;j<10;j++){
+     const adverse=z*40+j*4;
+     const price=entry+(dir==='SELL'?1:-1)*adverse/10;
+     const toSL=120-adverse;
+     const toTP=tp+adverse;
+     all.push({z:z+1,j:j+1,adverse,price,toSL,toTP});
+   }
+ }
+ const active=all.filter(x=>x.z<=zones);
+ const profitPerBaseLot=active.reduce((s,x)=>s+x.toTP*pv,0);
+ const raw=(loss+extra)/(profitPerBaseLot||1);
+ const base=Math.floor((raw+1e-10)/step)*step;
+ const lot=Number(base.toFixed(5));
+ let riskByZone=[0,0,0],profit=0,totalLot=0,body='';
+ all.forEach(x=>{
+   const activeLayer=x.z<=zones,l=activeLayer?lot:0;
+   const risk=l*x.toSL*pv,pr=l*x.toTP*pv;
+   if(activeLayer){riskByZone[x.z-1]+=risk;profit+=pr;totalLot+=l;}
+   body+=`<tr style="${activeLayer?'':'opacity:.4'}"><td>${x.z}${activeLayer?'':' (tidak aktif)'}</td><td>${x.j}</td><td>${fmt(x.price)}</td><td>${fmt(l,2)}</td><td>${fmt(x.toSL,0)}</td><td>${fmt(risk,0)}</td><td>${fmt(x.toTP,0)}</td><td>${fmt(pr,0)}</td></tr>`;
+ });
+ const totalRisk=riskByZone.slice(0,zones).reduce((s,x)=>s+x,0),net=profit-loss;
+ $('recRawLot').textContent=fmt(raw,4);$('recLot').textContent=fmt(lot,2);$('recTotalLot').textContent=fmt(totalLot,2);
+ $('recProfit').textContent=money(profit);$('recPrevLoss').textContent=money(loss);$('recNet').textContent=money(net);
+ $('recRisk1').textContent=money(riskByZone[0]);$('recRisk2').textContent=money(riskByZone[0]+riskByZone[1]);$('recRisk3').textContent=money(riskByZone.reduce((s,x)=>s+x,0));$('recRiskSelected').textContent=money(totalRisk);
+ $('recRows').innerHTML=body;$('recFoot').innerHTML=`<tr><td colspan="3">TOTAL (${zones} zona aktif)</td><td>${fmt(totalLot,2)}</td><td>—</td><td>${fmt(totalRisk,0)}</td><td>—</td><td>${fmt(profit,0)}</td></tr>`;
+ let msgs=[];
+ if(lot<step)msgs.push('Lot hasil pembulatan turun menjadi 0. Dengan nilai pip/input ini, lot minimum tidak cukup untuk mencapai target recovery.');
+ if(profit<loss+extra)msgs.push('Target profit setelah pembulatan lot belum menutup kerugian sebelumnya + surplus.');
+ else msgs.push('Target profit hitungan sudah menutup kerugian sebelumnya + surplus sebelum biaya transaksi.');
+ if(cap>0&&totalRisk>cap)msgs.push(`PERINGATAN: risiko ke batas SL ${fmt(totalRisk,0)} cent melebihi batas yang dipilih ${fmt(cap,0)} cent.`);
+ if(cap===0)msgs.push('Batas risiko maksimum disetel 0 (tidak dibatasi). Periksa apakah risiko ke SL masih dapat diterima.');
+ msgs.push(`Skenario ini memakai ${zones} zona aktif. Risiko gabungan ini belum termasuk kerugian setup sebelumnya, spread, komisi, swap, atau slippage.`);
+ $('recWarning').textContent=msgs.join(' ');$('recWarning').className='notice '+((lot<step||profit<loss+extra||(cap>0&&totalRisk>cap))?'warn':'good');
+}
+['risk','direction','entry','tp','pipvalue','step'].forEach(id=>$(id).addEventListener('change',calculateMain));
+['prevLoss','recEntry','recDirection','recTP','recZones','recLossExtra','recPipValue','recLotStep','riskCap'].forEach(id=>$(id).addEventListener('change',calculateRecovery));
+calculateMain();calculateRecovery();
+</script>
+</body></html>
